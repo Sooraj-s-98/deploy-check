@@ -1,11 +1,41 @@
 import React from "react";
+import { Button } from "./ui/MovingBorder";
 import { BsChatQuote } from "react-icons/bs";
+import { CiLogout } from "react-icons/ci";
 
 const SideBar: React.FC = () => {
   return (
-    <div className="flex justify-center items-center gap-2 pt-5">
-      <BsChatQuote size={25} />
-      <span className="font-oswald">Image Wordy</span>
+    <div className="flex flex-col h-screen">
+      {/* top section */}
+      <section className="flex justify-center items-center gap-2 p-5">
+        <Button
+          borderRadius="1.75rem"
+          className="bg-neutral-900 text-neutral-100 border-slate-800 flex justify-center items-center gap-2 p-5"
+        >
+          <BsChatQuote size={30} />
+          <span className="font-oswald text-lg">Image Wordy</span>
+        </Button>
+      </section>
+
+      {/* Middle */}
+      <section className="flex-grow overflow-y-auto h-[80vh]">
+        {/* Your future component will go here */}
+        <div className="h-full bg-gray-100 p-4">
+          {/* Placeholder content */}
+          <p>This is where your future component will be placed.</p>
+        </div>
+      </section>
+
+      {/* bottom */}
+      <section className="flex justify-center items-center gap-2 p-5">
+        <button
+          className="w-56 flex justify-center px-4 py-2 rounded-md border border-black bg-neutral-900 
+      text-red-400 text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200 gap-2"
+        >
+          <CiLogout size={35} />
+          <span className="font-oswald text-lg">Logout</span>
+        </button>
+      </section>
     </div>
   );
 };
