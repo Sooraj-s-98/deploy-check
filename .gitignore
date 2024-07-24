@@ -86,3 +86,4 @@
 # Temporary folders
 /server/tmp/
 /server/temp/
+/server/dist
