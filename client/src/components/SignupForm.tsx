@@ -1,13 +1,53 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Label } from "./ui/Label";
 import { Input } from "./ui/Input";
 import { cn } from "../lib/utils";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function SignupForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [isFormValid, setIsFormValid] = useState(true);
+  const [message, setMessage] = useState<string | null>(null);
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const confirmPwd = formData.get("confirm_pwd") as string;
+
+    if (password !== confirmPwd) {
+      setIsFormValid(false);
+      setMessage("Passwords do not match");
+      return;
+    }
+    setIsFormValid(true);
+    setMessage(null);
+
+    try {
+      await auth?.signup(name, email, password);
+      navigate("/home");
+    } catch (error) {
+      setMessage("Signup failed. Please try again");
+      console.log(error);
+    }
+    // console.log("Form submitted");
   };
+
+  useEffect(() => {
+    if (!isFormValid) {
+      setMessage("Passwords do not match");
+    }
+  }, [isFormValid]);
+
+  useEffect(() => {
+    if (auth?.user) {
+      return navigate("/home");
+    }
+  }, [auth]);
 
   return (
     <div
@@ -20,14 +60,19 @@ function SignupForm() {
       <p className="text-sm max-w-sm mt-2 text-neutral-300">
         Sign Up to get started
       </p>
-
+      {message && (
+        <span className="text-red-400 text-sm max-w-sm mt-2 font-montserrat">
+          &#9888; {message}
+        </span>
+      )}
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
-            <Label htmlFor="firstname">Name</Label>
+            <Label htmlFor="name">Name</Label>
             <Input
-              id="firstname"
-              placeholder="Tyler"
+              id="name"
+              name="name"
+              placeholder="Enter your name"
               type="text"
               className="bg-zinc-800 text-neutral-300"
             />
@@ -37,6 +82,7 @@ function SignupForm() {
           <Label htmlFor="email">Email Address</Label>
           <Input
             id="email"
+            name="email"
             placeholder="myemail@email.com"
             type="email"
             className="bg-zinc-800 text-neutral-300"
@@ -46,17 +92,19 @@ function SignupForm() {
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
+            name="password"
             placeholder="••••••••"
             type="password"
             className="bg-zinc-800 text-neutral-300"
           />
         </LabelInputContainer>
         <LabelInputContainer className="mb-8">
-          <Label htmlFor="twitterpassword">Re-type your password</Label>
+          <Label htmlFor="confirm_pwd">Re-type your password</Label>
           <Input
-            id="twitterpassword"
+            id="confirm_pwd"
             placeholder="••••••••"
-            type="twitterpassword"
+            name="confirm_pwd"
+            type="password"
             className="bg-zinc-800 text-neutral-300"
           />
         </LabelInputContainer>

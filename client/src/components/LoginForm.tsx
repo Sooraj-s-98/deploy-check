@@ -1,13 +1,35 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Label } from "./ui/Label";
 import { Input } from "./ui/Input";
 import { cn } from "../lib/utils";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [message, setMessage] = useState<string | null>(null);
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    try {
+      await auth?.login(email, password);
+      setMessage(null);
+    } catch (error) {
+      console.log(error);
+      setMessage("Signing in falied - check email/password");
+    }
     console.log("Form submitted");
   };
+
+  useEffect(() => {
+    if (auth?.user) {
+      return navigate("/home");
+    }
+  }, [auth]);
 
   return (
     <div
@@ -20,7 +42,11 @@ function LoginForm() {
       <p className="text-sm max-w-sm mt-2 text-neutral-300">
         Login to get started
       </p>
-
+      {message && (
+        <span className="text-red-400 text-sm max-w-sm mt-2 font-montserrat">
+          &#9888; {message}
+        </span>
+      )}
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4"></div>
         <LabelInputContainer className="mb-4">
@@ -29,6 +55,7 @@ function LoginForm() {
             id="email"
             placeholder="projectmayhem@fc.com"
             type="email"
+            name="email"
             className="bg-zinc-800 text-neutral-300"
           />
         </LabelInputContainer>
@@ -38,9 +65,11 @@ function LoginForm() {
             id="password"
             placeholder="••••••••"
             type="password"
+            name="password"
             className="bg-zinc-800 text-neutral-300"
           />
         </LabelInputContainer>
+
         <button
           className="bg-gradient-to-br relative group/btn from-zinc-900 
           to-zinc-900 block bg-zinc-800 w-full text-white 

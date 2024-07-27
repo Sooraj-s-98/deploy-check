@@ -1,9 +1,20 @@
 import { motion } from "framer-motion";
 import { LampContainer } from "../components/ui/Lamp";
 import { LoginForm } from "../components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
 
 const Login = () => {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (auth?.user) {
+      return navigate("/home");
+    }
+  }, [auth]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[40%_60%] h-screen">
       <LampContainer>
