@@ -1,10 +1,10 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { FiPaperclip } from "react-icons/fi";
-import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { AiOutlineSend } from "react-icons/ai";
+import Header from "./Header";
+// import { useAuth } from "../context/AuthContext";
 
 const MainChat = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleInput = () => {
@@ -25,18 +25,9 @@ const MainChat = () => {
     };
   }, []);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
   return (
     <div className="h-screen w-full bg-neutral-900 bg-dot-white/[0.2] flex flex-col">
-      <header className="w-full flex items-center justify-between p-4 bg-white bg-opacity-10 backdrop-blur-md">
-        <button onClick={toggleSidebar} className="text-white">
-          <TbLayoutSidebarLeftExpandFilled size={24} />
-        </button>
-        <h1 className="text-xl font-bold text-white">Image Wordy</h1>
-      </header>
+      <Header />
       <div
         className="pointer-events-none inset-0 flex items-center justify-center
         bg-black-100 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"
