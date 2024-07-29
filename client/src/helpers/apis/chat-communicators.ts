@@ -9,6 +9,14 @@ export const sendChatRequest = async (message: string) => {
     return data;
 };
 
+export const sendImageRequest = async (image: string) => {
+    const res = await axios.post("/chat/process-image", { image });
+    if (res.status !== 200) {
+        throw new Error("Unable to process image");
+    }
+    return res.data;
+};
+
 export const getUserChats = async () => {
     const res = await axios.get("/chat/all-chats");
     if (res.status !== 200) {

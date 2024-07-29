@@ -1,11 +1,38 @@
-import { useRef, useEffect } from "react";
-import { FiPaperclip } from "react-icons/fi";
-import { AiOutlineSend } from "react-icons/ai";
+import { useRef, useState, useEffect } from "react";
+import { BiImageAdd } from "react-icons/bi";
+import { AiOutlineSend, AiOutlineCheckCircle } from "react-icons/ai";
 import Header from "./Header";
-// import { useAuth } from "../context/AuthContext";
+import ChatItem from "./ChatItem";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import {
+  sendChatRequest,
+  sendImageRequest,
+} from "../helpers/apis/chat-communicators";
+
+// type Message = {
+//   role: "user" | "assistant" | "ocr";
+//   content: string;
+// };
+
+const chatMessages = [
+  { role: "user", content: "Hello this is a message content from user" },
+  {
+    role: "assistant",
+    content: "Hello this is a message content from assistant",
+  },
+  { role: "ocr", content: "Hello this is a message content from ocr" },
+];
 
 const MainChat = () => {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  // const [chatMessages, setChatMessages] = useState<Message[]>([]);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [message, setMessage] = useState<string>("");
 
   const handleInput = () => {
     if (textareaRef.current) {
@@ -25,6 +52,45 @@ const MainChat = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (auth?.isLoggedin && auth.user) {
+      console.log("Loading chats");
+    } else {
+      return navigate("/login");
+    }
+  }, [auth]);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result as string;
+      setUploadedImage(base64Image);
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (uploadedImage) {
+      try {
+        await sendImageRequest(uploadedImage);
+        setUploadedImage(null);
+        setMessage("");
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    } else if (message.trim()) {
+      try {
+        await sendChatRequest(message);
+        setMessage("");
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    }
+  };
+
   return (
     <div className="h-screen w-full bg-neutral-900 bg-dot-white/[0.2] flex flex-col">
       <Header />
@@ -33,20 +99,50 @@ const MainChat = () => {
         bg-black-100 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"
       ></div>
 
-      <div className="flex-grow flex items-center justify-center bg-zinc-700 h-20 w-96 rounded-2xl m-4">
-        Chat Content
+      <div
+        ref={chatContainerRef}
+        className="flex-grow flex flex-col-reverse overflow-y-auto p-4 gap-4 ml-10"
+      >
+        {chatMessages
+          .slice(0)
+          .reverse()
+          .map((chat, index) => (
+            <ChatItem content={chat.content} role={chat.role} key={index} />
+          ))}
       </div>
 
       <section className="flex flex-col items-center justify-center p-4">
-        <div className="flex items-center justify-center gap-2 bg-zinc-700 rounded-2xl w-full max-w-4xl p-4">
-          <FiPaperclip size={24} className="text-white cursor-pointer" />
+        <div
+          className="flex items-center justify-center gap-2 bg-neutral-800 rounded-2xl 
+        w-full max-w-4xl p-4"
+        >
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            id="file-upload"
+            onChange={handleImageUpload}
+          />
+          <label htmlFor="file-upload">
+            <BiImageAdd size={24} className="text-white cursor-pointer" />
+          </label>
           <textarea
             ref={textareaRef}
-            placeholder="Type a message..."
-            className="bg-neutral-800 text-white w-full h-12 rounded-2xl px-4 py-2 outline-none resize-none"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Insert a texual image or type a message..."
+            className="bg-neutral-800 text-white w-full h-12 rounded-2xl 
+            px-4 py-2 outline-none resize-none"
             rows={1}
           />
-          <AiOutlineSend size={24} className="text-white cursor-pointer" />
+          <AiOutlineSend
+            size={24}
+            className="text-white cursor-pointer"
+            onClick={handleSubmit}
+          />
+          {uploadedImage && (
+            <AiOutlineCheckCircle size={24} className="text-green-500" />
+          )}
         </div>
         <div className="relative px-2 py-2 text-center text-xs text-gray-300">
           <span>Image Wordy can make mistakes. Check important info.</span>
