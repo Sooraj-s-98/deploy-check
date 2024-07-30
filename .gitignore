@@ -84,6 +84,7 @@
 /server/.env.production
 
 # Temporary folders
+/server/eng.traineddata
 /server/tmp/
 /server/temp/
 /server/dist
