@@ -17,23 +17,42 @@ export const generateChatCompletion = async (req: Request, res: Response, next: 
         const filteredChats = user.chats.filter((chat :any) => chat.role === "ocr");
         const filter = filteredChats.map((chat: any) => ({ role: chat.role, content: chat.content })) as ChatCompletionRequestMessage[];
         const singleData = filter[filter.length-1]
-        const lastOcr = singleData["content"]
+        const lastOcr = singleData ? singleData["content"] : null;
 
         // Prompt and guidlines for user messages
-        const prompt = `You are an AI assistant specialized in textual analysis. 
-        Your primary function is to analyze and respond to queries about text extracted from images using OCR. 
-        Here's the most recent OCR-extracted text:
-        "${lastOcr}"
-        Please respond to the following user query:
-        User: ${message}
-        Guidelines for your response:
-        1. If the user's query is related to the OCR text, provide a detailed analysis based on the content.
-        2. If the query is not directly related to the OCR text, still provide a helpful response,
-        but try to relate it back to textual analysis or OCR concepts if possible.
-        3. If the query is completely unrelated to text analysis or OCR, 
-        politely remind the user of your primary function while still attempting to provide a helpful answer.
-        4. Always maintain a context of being a textual analysis assistant, even when answering general questions.
-        Please provide a relevant, informative, and context-appropriate response.`
+        let prompt: string;
+        if (lastOcr) {
+            prompt = `You are an AI assistant specialized in textual analysis. 
+            Your primary function is to analyze and respond to queries about text extracted from images using OCR. 
+            Here's the most recent OCR-extracted text:
+            "${lastOcr}"
+            Please respond to the following user query:
+            User: ${message}
+            Guidelines for your response:
+            1. If the user's query is related to the OCR text, 
+            provide a detailed analysis based on the content.
+            2. If the query is not directly related to the OCR text, 
+            still provide a helpful response, but try to relate it back to textual analysis or OCR concepts if possible.
+            3. If the query is completely unrelated to text analysis or OCR, 
+            politely remind the user of your primary function while still attempting to provide a helpful answer.
+            4. Always maintain a context of being a textual analysis assistant, 
+            even when answering general questions.`;
+        } else {
+            prompt = `You are an AI assistant specialized in textual analysis. 
+            Your primary function is to analyze and respond to queries about text extracted from images using OCR. 
+            However, no OCR text has been provided yet.
+            Please respond to the following user query:
+            User: ${message}
+            Guidelines for your response:
+            1. Inform the user that no image has been uploaded or OCR performed yet, 
+            if their query seems to expect OCR data.
+            2. Provide general information about OCR and textual analysis if the query is related to these topics.
+            3. For queries unrelated to OCR or textual analysis, 
+            provide a helpful response while gently reminding the user of your primary function.
+            4. Encourage the user to upload an image for OCR if they want specific text analysis.
+            5. Always maintain a context of being a textual analysis assistant, 
+            even when answering general questions.`;
+        }
 
         const config = configureOpenAI();
         const openai = new OpenAIApi(config);
