@@ -31,7 +31,7 @@ const ChatItem = ({ content, role }: { content: string; role: string }) => {
          bg-neutral-800 rounded-2xl w-full max-w-4xl p-5 font-montserrat"
           >
             <Avatar>
-              <AvatarImage src="/BsChatQuote.png" alt="IM logo" />
+              <AvatarImage src="/BsChatQuote-transparent.png" alt="IM logo" />
               <AvatarFallback>IW</AvatarFallback>
             </Avatar>
             <div className="bg-neutral-900 p-5 border border-slate-700 rounded-md">
@@ -47,7 +47,7 @@ const ChatItem = ({ content, role }: { content: string; role: string }) => {
          bg-neutral-800 rounded-2xl w-full max-w-4xl p-5 font-montserrat"
           >
             <Avatar>
-              <AvatarImage src="/BsChatQuote.png" alt="user" />
+              <AvatarImage src="/BsChatQuote-transparent.png" alt="user" />
               <AvatarFallback>IW</AvatarFallback>
             </Avatar>
             <div className="bg-neutral-900 p-5 border border-slate-700 rounded-md">
