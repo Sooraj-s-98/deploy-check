@@ -11,4 +11,14 @@ interface UserAuth {
     logout: () => Promise<void>;
 }
 
-export type {User, UserAuth}
+interface Message {
+    role: "user" | "assistant" | "ocr" | "ocr-image";
+    content: string;
+}
+
+interface MainChatProps {
+    chatMessages: Message[];
+    setChatMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+}
+
+export type {User, UserAuth, Message, MainChatProps}
