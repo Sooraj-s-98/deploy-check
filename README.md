@@ -2,28 +2,43 @@
 
 Build with React+TypeScipt.js , Node+Express.js, Tesseract.js and OpenAI api
 
-_Image Wordy is a simple chat bot that can take an image and text as input, and analyse the text using
-OCR to recognise and extract the content from image and have analysis using it._
+_Image Wordy is a simple chatbot that can take an image and text as input, and analyze the text using
+OCR to recognize and extract the content from the image and have analysis using it._
 
 ### Landing Page:
 
+<img width="1434" alt="landing page" src="https://github.com/user-attachments/assets/5da99b43-62bb-4bfd-a08c-7bc1dc7b9511">
+
 ### Signup Page:
+
+<img width="1434" alt="signup page" src="https://github.com/user-attachments/assets/3de9849c-1884-44cb-9ee1-31e309445474">
 
 ### Login Page:
 
+<img width="1434" alt="login page" src="https://github.com/user-attachments/assets/ccab74ab-a22e-44e6-82ed-41d0da99b474">
+
 ### Home Page:
 
+<img width="1434" alt="home page" src="https://github.com/user-attachments/assets/247a3dc2-7082-4b4e-859b-0c4424323927">
+
+
 ### Not Found Page:
+
+<img width="1434" alt="Not found page" src="https://github.com/user-attachments/assets/bf91e5eb-ffbb-42f3-8b17-0f2cd7fe328d">
 
 ## Run Locally
 
 clone the repo:
 
-`git clone https://github.com/Adithej/image-wordy.git`
+```
+git clone https://github.com/Adithej/image-wordy.git
+```
 
 Go to Project Directory:
 
-`cd image-wordy`
+```
+cd image-wordy
+```
 
 Install dependencies for both client and server:
 
@@ -37,22 +52,30 @@ npm install
 
 server :
 
-`cd server`
+```
+cd server
+```
 
-Create`.env`file at root of server directory
-Copy the contents from`.env.example`to`.env`Add your secrect values to`.env` , OPEN-AI api key , MONGO_DB Atlas url and password, your own secrect
+Create `.env` file at the root of the server directory
+Copy the contents from`.env.example`to`.env`Add your secret values to`.env` , OPEN-AI API key , MONGO_DB Atlas URL and password, your own secret
 Cookie and JWT random string values.
 
-`npm install`
+```
+npm install
+```
 
-Start both client and and server:
+Start both client and server:
 
 .image-wordy/client :
 
-`npm run dev`
+```
+npm run dev
+```
 
 .image-wordy/server :
 
-`npm run dev`
+```
+npm run dev
+```
 
-Use the testImages at `TestImages` directory on root level, or use your own english texual images to try out and get insights.
+Use the testImages at the `TestImages` directory on the root level, or use your English textual images to try out and get insights.
