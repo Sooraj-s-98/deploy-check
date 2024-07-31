@@ -3,7 +3,6 @@ import { User, Chat } from "../models/User.js";
 import { configureOpenAI } from "../config/openAI.js";
 import { OpenAIApi, ChatCompletionRequestMessage } from "openai";
 
-// Generate Chat Completion
 export const generateChatCompletion = async (req: Request, res: Response, next: NextFunction) => {
     const { message} = req.body; // user prompt
     
@@ -71,8 +70,6 @@ export const generateChatCompletion = async (req: Request, res: Response, next: 
         await userMessage.save();
         await openAiResponse.save();
         await user.save();
-        // Populate the chats with the latest data
-        // await user.populate('chats');
 
         return res.status(200).json({ chats: user.chats });
     } catch (error) {
@@ -81,7 +78,6 @@ export const generateChatCompletion = async (req: Request, res: Response, next: 
     }
 };
 
-// Send Chats to User
 export const sendChatsToUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await User.findById(res.locals.jwtData.id).populate('chats');
@@ -94,7 +90,6 @@ export const sendChatsToUser = async (req: Request, res: Response, next: NextFun
     }
 };
 
-// Delete Chats
 export const deleteChats = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await User.findById(res.locals.jwtData.id);

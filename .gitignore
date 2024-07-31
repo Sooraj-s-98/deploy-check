@@ -39,6 +39,7 @@
 /server/npm-debug.log*
 /server/yarn-debug.log*
 /server/yarn-error.log*
+/server/dist
 
 # Logs
 /server/logs
@@ -55,6 +56,7 @@
 
 # Coverage directory used by tools like istanbul
 /server/coverage
+
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 /server/build/Release
