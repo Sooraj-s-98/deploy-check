@@ -144,7 +144,7 @@ const MainChat: React.FC<MainChatProps> = ({
             placeholder={
               uploadedImage
                 ? "An image is already uploaded. Remove it to enter text."
-                : "Insert a textual image or type a message..."
+                : "Insert an image or type a message..."
             }
             className="bg-neutral-800 text-white w-full h-12 rounded-2xl 
             px-4 py-2 outline-none resize-none"
