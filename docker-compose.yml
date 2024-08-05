@@ -11,6 +11,7 @@ services:
       - JWT_SECRET=your_jwt_secret
     volumes:
       - ./server:/usr/src/app
+      - /usr/src/app/node_modules
     command: npm run start
 
   client:

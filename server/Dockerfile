@@ -1,5 +1,5 @@
 
-FROM node:20 as build-stage
+FROM node:18 as build-stage
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -11,6 +11,7 @@ COPY package*.json ./
 # Bundle app source
 COPY . .
 
+RUN npm cache clean --force
 RUN npm install
 RUN npm run build
 

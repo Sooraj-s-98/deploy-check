@@ -90,3 +90,5 @@
 /server/tmp/
 /server/temp/
 /server/dist
+
+.dockerignore
