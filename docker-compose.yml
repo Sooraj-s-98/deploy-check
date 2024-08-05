@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  server:
+    build: ./server
+    ports:
+      - "8080:8080"
+    environment:
+      - OPENAI_API_KEY=your_openai_api_key
+      - MONGO_DB_URL=your_mongo_db_url
+      - COOKIE_SECRET=your_cookie_secret
+      - JWT_SECRET=your_jwt_secret
+    volumes:
+      - ./server:/usr/src/app
+    command: npm run start
+
+  client:
+    build: ./client
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
